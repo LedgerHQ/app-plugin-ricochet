@@ -16,8 +16,8 @@ const Resolve = require("path").resolve;
 const NANOS_ETH_PATH = Resolve("elfs/ethereum_nanos.elf");
 const NANOX_ETH_PATH = Resolve("elfs/ethereum_nanox.elf");
 
-const NANOS_PLUGIN_PATH = Resolve("elfs/ricochet_nanos.elf");
-const NANOX_PLUGIN_PATH = Resolve("elfs/ricochet_nanox.elf");
+const NANOS_PLUGIN_PATH = Resolve("elfs/plugin_nanos.elf");
+const NANOX_PLUGIN_PATH = Resolve("elfs/plugin_nanox.elf");
 
 const NANOS_PLUGIN = { Ricochet: NANOS_PLUGIN_PATH };
 const NANOX_PLUGIN = { Ricochet: NANOX_PLUGIN_PATH };
@@ -78,7 +78,7 @@ function txFromEtherscan(rawTx) {
  * Emulation of the device using zemu
  * @param {string} device name of the device to emulate (nanos, nanox)
  * @param {function} func
- * @param {boolean} signed the plugin is already signed 
+ * @param {boolean} signed the plugin is already signed
  * @returns {Promise}
  */
 function zemu(device, func, signed = false, testNetwork) {
@@ -134,7 +134,7 @@ function processDowngradeTest(device, pluginName, transactionUploadDelay, token,
     const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + contractAddrs[token] + '.abi.json';
     const abi = require(abi_path);
     const contract = new ethers.Contract(contractAddrs[token], abi);
-    // URL 
+    // URL
 
     // Constants used to create the transaction
     const amount = parseUnits("10", 18);
@@ -186,7 +186,7 @@ function processDowngradeToEthTest(device, pluginName, transactionUploadDelay, t
     const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + contractAddrs[token] + '.abi.json';
     const abi = require(abi_path);
     const contract = new ethers.Contract(contractAddrs[token], abi);
-    // URL 
+    // URL
 
     // Constants used to create the transaction
     const amount = parseUnits("312", 18);
@@ -239,7 +239,7 @@ function processUpgradeTest(device, pluginName, transactionUploadDelay, token, c
     const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + contractAddrs[token] + '.abi.json';
     const abi = require(abi_path);
     const contract = new ethers.Contract(contractAddrs[token], abi);
-    // URL 
+    // URL
 
     // Constants used to create the transaction
     const amount = parseUnits("10", 18);
@@ -269,7 +269,7 @@ function processUpgradeTest(device, pluginName, transactionUploadDelay, token, c
     );
     const steps = device.steps
     await sim.navigateAndCompareSnapshots(".", label, [steps, 0]);
-    
+
     await tx;
     //}
   }, signed, testNetwork));
@@ -290,7 +290,7 @@ function processUpgradeByEthTest(device, pluginName, transactionUploadDelay, tok
     const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + contractAddrs[token] + '.abi.json';
     const abi = require(abi_path);
     const contract = new ethers.Contract(contractAddrs[token], abi);
-    // URL 
+    // URL
 
     // Constants used to create the transaction
     const amount = parseUnits("5.213", 18);
@@ -343,7 +343,7 @@ function processStopTest(device, pluginName, transactionUploadDelay, token, cont
     const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + `0x3e14dc1b13c488a8d5d310918780c983bd5982e7` + '.abi.json';
     const abi = require(abi_path);
     const contract = new ethers.Contract(`0x3e14dc1b13c488a8d5d310918780c983bd5982e7`, abi);
-    // URL 
+    // URL
 
     // Constants used to create the transaction
     const amount = "0";
@@ -389,14 +389,14 @@ function processStopTest(device, pluginName, transactionUploadDelay, token, cont
  */
 function processStartTest(device, pluginName, transactionUploadDelay, token, contractAddrs, signed = false, testNetwork) {
   test('[' + device.label + '] Start ' + token, zemu(device.name, async (sim, eth) => {
-    
+
     const address = `0x3e14dc1b13c488a8d5d310918780c983bd5982e7`;
 
     const label = device.name + "_start_" + token;
     const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + address + '.abi.json';
     const abi = require(abi_path);
     const contract = new ethers.Contract(address, abi);
-    // URL 
+    // URL
 
     // Constants used to create the transaction
     const amount = "0";
@@ -440,14 +440,14 @@ function processStartTest(device, pluginName, transactionUploadDelay, token, con
  */
 function processEditTest(device, pluginName, transactionUploadDelay, token, contractAddrs, signed = false, testNetwork) {
   test('[' + device.label + '] Edit ' + token, zemu(device.name, async (sim, eth) => {
-    
+
     const address = `0x3e14dc1b13c488a8d5d310918780c983bd5982e7`;
-    
+
     const label = device.name + "_edit_" + token;
     const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + address + '.abi.json';
     const abi = require(abi_path);
     const contract = new ethers.Contract(address, abi);
-    // URL 
+    // URL
 
     // Constants used to create the transaction
     const amount = "0";
@@ -491,14 +491,14 @@ function processEditTest(device, pluginName, transactionUploadDelay, token, cont
  */
 function processSecondStartTest(device, pluginName, transactionUploadDelay, token, contractAddrs, signed = false,testNetwork) {
   test('[' + device.label + '] Second Start ' + token, zemu(device.name, async (sim, eth) => {
-    
+
     const address = `0x3e14dc1b13c488a8d5d310918780c983bd5982e7`;
 
     const label = device.name + "_second_start_" + token;
     const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + address + '.abi.json';
     const abi = require(abi_path);
     const contract = new ethers.Contract(address, abi);
-    // URL 
+    // URL
 
     // Constants used to create the transaction
     const amount = "0";

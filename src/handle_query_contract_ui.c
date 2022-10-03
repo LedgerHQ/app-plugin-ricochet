@@ -32,7 +32,7 @@ static void decimalToAmount(unsigned long long value, context_t *context) {
     uint8_t rem;
     memset(context->amount, 0, sizeof(context->amount));
     do {
-        rem = (uint8_t)(value % 256);
+        rem = (uint8_t) (value % 256);
         value /= 256;
         context->amount[sizeof(context->amount) - i - 1] = rem;
         i++;
