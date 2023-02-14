@@ -34,6 +34,11 @@ APPNAME = "Ricochet"
 #prepare hsm generation
 ifeq ($(TARGET_NAME), TARGET_NANOS)
 ICONNAME=icons/nanos_app_ricochet.gif
+else ifeq ($(TARGET_NAME), TARGET_STAX)
+ICONNAME=icons/stax_app_ricochet.gif
+DEFINES += ICONGLYPH=C_stax_ricochet_64px
+DEFINES += ICONBITMAP=C_stax_ricochet_64px_bitmap
+GLYPH_FILES += $(ICONNAME)
 else
 ICONNAME=icons/nanox_app_ricochet.gif
 endif
