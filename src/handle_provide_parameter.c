@@ -84,6 +84,8 @@ static void handle_flow_rate_second_part(const ethPluginProvideParameter_t *msg,
 }
 
 static void handle_call_agreement(ethPluginProvideParameter_t *msg, context_t *context) {
+    uint16_t tmp;
+
     if (context->go_to_offset == 1) {
         if (msg->parameterOffset != context->offset + SELECTOR_SIZE) {
             return;
@@ -97,13 +99,19 @@ static void handle_call_agreement(ethPluginProvideParameter_t *msg, context_t *c
             context->next_param = PATH_OFFSET;
             break;
         case PATH_OFFSET:
-            context->offset = U2BE(msg->parameter, PARAMETER_LENGTH - sizeof(context->offset) + 2);
+            if (!U2BE_from_parameter(msg->parameter, &tmp)) {
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
+            context->offset = tmp;
             context->next_param = PATH_LENGTH;
             context->skip++;
             break;
         case PATH_LENGTH:
-            context->array_len =
-                U2BE(msg->parameter, PARAMETER_LENGTH - sizeof(context->array_len));
+            if (!U2BE_from_parameter(msg->parameter, &context->array_len)) {
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             context->offset = msg->parameterOffset - SELECTOR_SIZE + PARAMETER_LENGTH;
             context->next_param = CALL_DATA;
             break;
@@ -147,6 +155,8 @@ static void handle_call_agreement(ethPluginProvideParameter_t *msg, context_t *c
 }
 
 void handle_batch_call(ethPluginProvideParameter_t *msg, context_t *context) {
+    uint16_t tmp;
+
     if (context->go_to_offset == 1) {
         if (msg->parameterOffset != context->offset + SELECTOR_SIZE) {
             return;
@@ -156,20 +166,29 @@ void handle_batch_call(ethPluginProvideParameter_t *msg, context_t *context) {
 
     switch (context->next_param) {
         case PATH_OFFSET:
-            context->offset = U2BE(msg->parameter, PARAMETER_LENGTH - sizeof(context->offset) + 2);
+            if (!U2BE_from_parameter(msg->parameter, &tmp)) {
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
+            context->offset = tmp;
             context->next_param = PATH_LENGTH;
             break;
         case PATH_LENGTH:
-            context->array_len =
-                U2BE(msg->parameter, PARAMETER_LENGTH - sizeof(context->array_len));
+            if (!U2BE_from_parameter(msg->parameter, &context->array_len)) {
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             context->offset =
                 msg->parameterOffset - SELECTOR_SIZE + PARAMETER_LENGTH * context->array_len;
             context->go_to_offset = 1;
             context->next_param = CONTRACT_PATH_OFFSET;
             break;
         case CONTRACT_PATH_OFFSET:
-            context->offset = U2BE(msg->parameter, PARAMETER_LENGTH - sizeof(context->offset) + 2) +
-                              PARAMETER_LENGTH * 2;
+            if (!U2BE_from_parameter(msg->parameter, &tmp)) {
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
+            context->offset = tmp + (PARAMETER_LENGTH * 2);
             context->go_to_offset = 1;
             context->next_param = OPERATION_TYPE;
             break;
@@ -185,8 +204,10 @@ void handle_batch_call(ethPluginProvideParameter_t *msg, context_t *context) {
             break;
 
         case BYTES_ARRAY_LEN:
-            context->array_len =
-                U2BE(msg->parameter, PARAMETER_LENGTH - sizeof(context->array_len));
+            if (!U2BE_from_parameter(msg->parameter, &context->array_len)) {
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             context->next_param = INPUT_DATA;
             context->offset = msg->parameterOffset - SELECTOR_SIZE + PARAMETER_LENGTH;
             break;
