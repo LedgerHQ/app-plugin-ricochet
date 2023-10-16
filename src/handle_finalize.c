@@ -20,8 +20,7 @@ void handle_receive_address_lookup(ethPluginFinalize_t *msg, context_t *context)
     }
 }
 
-void handle_finalize(void *parameters) {
-    ethPluginFinalize_t *msg = (ethPluginFinalize_t *) parameters;
+void handle_finalize(ethPluginFinalize_t *msg) {
     context_t *context = (context_t *) msg->pluginContext;
 
     if (context->valid) {
