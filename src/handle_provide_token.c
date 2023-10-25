@@ -68,8 +68,7 @@ void handle_received_address(const ethPluginProvideInfo_t *msg, context_t *conte
            sizeof(context->contract_address_received));
 }
 
-void handle_provide_token(void *parameters) {
-    ethPluginProvideInfo_t *msg = (ethPluginProvideInfo_t *) parameters;
+void handle_provide_token(ethPluginProvideInfo_t *msg) {
     context_t *context = (context_t *) msg->pluginContext;
 
     switch (context->selectorIndex) {

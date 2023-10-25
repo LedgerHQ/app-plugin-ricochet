@@ -12,8 +12,7 @@ void handle_init_cfa_screen(ethQueryContractID_t *msg, const context_t *context)
     }
 }
 
-void handle_query_contract_id(void *parameters) {
-    ethQueryContractID_t *msg = (ethQueryContractID_t *) parameters;
+void handle_query_contract_id(ethQueryContractID_t *msg) {
     const context_t *context = (context_t *) msg->pluginContext;
 
     strlcpy(msg->name, PLUGIN_NAME, msg->nameLength);
